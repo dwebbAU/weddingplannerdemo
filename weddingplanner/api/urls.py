@@ -11,6 +11,8 @@ urlpatterns = [
 	url(r'^service/(?P<pk>[0-9]+)/$',views.ServiceDetail.as_view()),
 	url(r'^serviceofferings/$',views.ServiceOfferingList.as_view()),
 	url(r'^serviceoffering/(?P<pk>[0-9]+)/$',views.ServiceOfferingDetail.as_view()),
+	url(r'^events/$',views.EventList.as_view()),
+	url(r'^event/(?P<pk>[0-9]+)/$',views.EventDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

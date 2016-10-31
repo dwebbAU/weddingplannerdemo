@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Customer, ServiceProvider, Service, ServiceOffering
+from core.models import Customer, ServiceProvider, Service, ServiceOffering, Event
 
 class CustomerSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -20,3 +20,8 @@ class ServiceOfferingSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ServiceOffering
 		fields = ('name','service_provider','cost')
+
+class EventSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Event
+		fields = ('name','user','budget','location_lat','location_lon')
