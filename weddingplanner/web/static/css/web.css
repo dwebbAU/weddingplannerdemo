@@ -3,4 +3,12 @@
 }
 
 #modal_event_parameters .modal-dialog {width:75%;}
-#modal_event_parameters .modal-open {text-align: center;}
+#modal_event_name .modal-open {text-align: center;}
+
+html {
+  background: url({% static 'img/setup_background.jpg' %}) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}

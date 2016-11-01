@@ -31,7 +31,7 @@ class ServiceOffering(models.Model):
 class Event(models.Model):
 	user = models.OneToOneField(User)
 	name = models.CharField(max_length=100)
-	budget = models.DecimalField(max_digits=6,decimal_places=2)
+	budget = models.DecimalField(max_digits=8,decimal_places=0)
 	location_lat = models.DecimalField(max_digits=9,decimal_places=6)
 	location_lon = models.DecimalField(max_digits=9,decimal_places=6)
 

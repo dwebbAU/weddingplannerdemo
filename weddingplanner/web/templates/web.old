@@ -1,22 +1,19 @@
-<<<<<<< HEAD
-=======
 {% extends 'base_web.html' %}
 
 {% block body_block %}
 <! -- Modal -->
-<div id="modal_event_parameters" class="modal fade" role="dialog" data-backdrop="static">
+<div id="modal_event_name" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog">
 
     <div class="modal-content">
       <div class="modal-header">
-	<h4 class="modal-title">Wedding Details</h4>
+	<h4 class="modal-title">Looks like you're new here...</h4>
       </div>
       <div class="modal-body">
       <div class="form-group">
-	<label> First we need to collect some details about your upcoming wedding</label>
-      <div class="form-group">
+	<h5> First things first, let's give your wedding a name. </h5>
 	<label for="md_event_name">Name:</label>
-	<input type="text" class="form-control" id="md_event_name">
+	<input type="text" class="form-control" placeholder="Tim & Hughsey's Wedding"  id="md_event_name" >
       </div>
       
       <div class="form-group">
@@ -45,15 +42,8 @@
 {% endblock %}
 
 {% block script_block %}
->>>>>>> df781d7c097d38597f6f9db0058aae4b23ad12e5
 <script>
 $(document).ready(function(){
-
-
-	
-	$('#modal_event_parameters').modal('show');
-
-
 
 	$.ajax({
 		url : "api/events/",
@@ -69,8 +59,16 @@ $(document).ready(function(){
 		}
 	});
 
-<<<<<<< HEAD
-=======
+	$.ajax({
+		url : "api/services/",
+		type : "GET",
+		success : function(json){
+			for (var i = 0;i < json.length; i++){
+				console.log(json[i].name);
+			}
+		}
+	});
+
 	$("#sld_event_budget").slider();
 	$("#sld_event_budget").on("slide",function(slideEvt){
 	  $("#lbl_event_budget_val").text(slideEvt.value);
@@ -83,6 +81,8 @@ $(document).ready(function(){
           }
 	});
 
+
+	$('#modal_event_name').modal('show');
 	$('#btn_event_submit').click(function() {
 	var event_name = $("#md_event_name").val();
 
@@ -92,7 +92,7 @@ $(document).ready(function(){
 		  },
 		  type: 'POST',
 		  url: '/api/events/',
-		  data: '{"name":"' + event_name + '","budget":"' + $("#sld_event_budget").val() + '","location_lat":"27.4698","location_lon":"153.0251","user":"2"}',
+		  data: '{"name":"' + event_name + '","budget":"' + $("#sld_event_budget").val() + '","location_lat":"27.4698","location_lon":"153.0251"}',
 		  success: function(data) { alert('data: ' + data); },
 		  error: function(xhr, textStatus, errorThrown){ alert('Status: ',textStatus); alert("Error: " + errorThrown);},
 		  contentType: "application/json",
@@ -100,6 +100,6 @@ $(document).ready(function(){
 	});
 	});
 	
->>>>>>> df781d7c097d38597f6f9db0058aae4b23ad12e5
 });
 </script>
+{% endblock %}

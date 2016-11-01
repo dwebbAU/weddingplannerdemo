@@ -1,39 +1,73 @@
 {% extends 'base_web.html' %}
-
+{% load static %} 
 {% block body_block %}
-<! -- Modal -->
-<div id="modal_event_parameters" class="modal fade" role="dialog" data-backdrop="static">
+<style>
+		html { 
+			background: url({% static 'img/setup_background.jpg' %}) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+</style>
+
+<div id="modal_event_name" class="modal fade" role="dialog" data-backdrop="static">
   <div class="modal-dialog">
 
     <div class="modal-content">
       <div class="modal-header">
-	<h4 class="modal-title">Wedding Details</h4>
+	      <h4 class="modal-title">Looks like you're new here...</h4>
       </div>
       <div class="modal-body">
-      <div class="form-group">
-	<label for="md_event_name">Name:</label>
-	<input type="text" class="form-control" id="md_event_name">
-      </div>
-      
-      <div class="form-group">
-	  <label for="md_event_budget">Budget:</label>
-	  <input type="text" data-slider-min="0" data-slider-max="100000" data-slider-step="1000" data-slider-value="40000" id="sld_event_budget"/>
-	  <label id="lbl_event_budget">$<label id="lbl_event_budget_val">40000</label></label>
-	<!--
-	<div class="col-md-3">
-	  <input id="chk_event_budget" type="checkbox" visibility="hidden"/> No Limit
+        <div class="form-group">
+	        <h5> First things first, let's give your wedding a name. </h5>
+	        <input type="text" class="form-control" placeholder="Tim & Hughsey's Wedding"  id="input_event_name" >
         </div>
-	-->
-      </div>
-      <div class="form-group">
- 	 <label for="md_event_location">Location</label>
-	 <select class="form-control-static" id="sel_event_location">
-	    <option>Brisbane</option>
-	 </select>
-      </div>
-      </div>
       <div class="modal-footer">
-	<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_event_submit">Continue</button>
+	      <button type="button" class="btn btn-success" id="btn_event_name_submit">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="modal_event_location" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="lbl_event_location_title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <h5> And where will your wedding be held?</h5>
+          <select class="selectpicker" id="sel_event_location">
+            <option>Brisbane</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="btn_event_location_submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal_event_budget" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="lbl_event_budget_title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <h5> Finally, what is your budget? (Don't worry, we can review this later)
+	  <br>
+	  <input type="text" data-slider-min="0" data-slider-max="100000" data-slider-step="1000" data-slider-value="40000" id="sld_event_budget" />
+	  <label id="lbl_event_budget">$</label><label id="lbl_event_budget_val">40000</label>
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-success" id="btn_event_budget_submit">Finish</button>
+	</div>
       </div>
     </div>
   </div>
@@ -44,61 +78,50 @@
 <script>
 $(document).ready(function(){
 
-	$.ajax({
-		url : "api/events/",
-		type : "GET",
-		success : function(json){
-			if(json.length){
-				window.location.replace("/dashboard");
-			}else{
-				window.location.replace("/setup");
-			}
-		},
-		error : function(xhr, textStatus, errorThrown){
-		}
-	});
+  $('#modal_event_name').modal('show');
+	
+  var eventDetails = new Object();
+	$('#btn_event_name_submit').click(function() {
+	    	eventDetails.name = $('#input_event_name').val();
+  		$('#lbl_event_location_title').text(eventDetails.name);
+		$('#modal_event_name').modal('hide');
+  		$('#modal_event_location').modal('show');
+  	});
 
-	$.ajax({
-		url : "api/services/",
-		type : "GET",
-		success : function(json){
-			for (var i = 0;i < json.length; i++){
-				console.log(json[i].name);
-			}
-		}
+	$('#btn_event_location_submit').click(function() {
+		eventDetails.location_lon = "27";
+		eventDetails.location_lat = "153";
+		$('#lbl_event_budget_title').text(eventDetails.name);
+		$('#modal_event_location').modal('hide');
+		$('#modal_event_budget').modal('show');
 	});
 
 	$("#sld_event_budget").slider();
 	$("#sld_event_budget").on("slide",function(slideEvt){
 	  $("#lbl_event_budget_val").text(slideEvt.value);
 	});
-	$("#chk_event_budget").click(function(){
-	  if(this.checked){
-	    $("#sld_event_budget").slider("disable");
-          }else{
-	    $("#sld_event_budget").slider("enable");
-          }
-	});
 
 
-	$('#modal_event_parameters').modal('show');
-	$('#btn_event_submit').click(function() {
-	var event_name = $("#md_event_name").val();
-
+	$('#btn_event_budget_submit').click(function() {
+		eventDetails.budget = $('#sld_event_budget').val();
+		
 		$.ajax({
 		  beforeSend: function(xhr){
 		    xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
 		  },
 		  type: 'POST',
 		  url: '/api/events/',
-		  data: '{"name":"' + event_name + '","budget":"' + $("#sld_event_budget").val() + '","location_lat":"27.4698","location_lon":"153.0251"}',
-		  success: function(data) { alert('data: ' + data); },
-		  error: function(xhr, textStatus, errorThrown){ alert('Status: ',textStatus); alert("Error: " + errorThrown);},
+		  data: JSON.stringify(eventDetails),
+		  success: function(data) { window.location.replace("/"); },
+		  error: function(xhr, textStatus, errorThrown){ alert('There was an error, soz: ' + errorThrown);},
 		  contentType: "application/json",
 		  dataType: 'json'
 	});
 	});
 	
 });
+
+	
+
 </script>
 {% endblock %}
