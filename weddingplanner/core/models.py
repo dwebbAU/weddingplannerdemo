@@ -16,7 +16,8 @@ class ServiceProvider(models.Model):
 
 class Service(models.Model):
 	name = models.CharField(max_length=100)
-
+	icon = models.CharField(max_length=100)
+	
 	def __str__(self):
 		return self.name
 
@@ -37,3 +38,10 @@ class Event(models.Model):
 
 	def __str__(self):
 		return self.name
+
+class ServiceRequirement(models.Model):
+	service = models.ForeignKey(Service)
+	event = models.ForeignKey(Event,related_name='event')
+
+	def __str__(self):
+		return self.service.name

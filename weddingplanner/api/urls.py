@@ -13,6 +13,8 @@ urlpatterns = [
 	url(r'^serviceoffering/(?P<pk>[0-9]+)/$',views.ServiceOfferingDetail.as_view()),
 	url(r'^events/$',views.EventList.as_view()),
 	url(r'^event/(?P<pk>[0-9]+)/$',views.EventDetail.as_view()),
+	url(r'^servicerequirements/$',views.ServiceRequirementList.as_view()),
+	url(r'^servicerequirement/(?P<pk>[0-9]+)/$',views.ServiceRequirementDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

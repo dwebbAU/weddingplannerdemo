@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from core.models import Customer, ServiceProvider, Service, ServiceOffering, Event
+from core.models import Customer, ServiceProvider, Service, ServiceOffering, Event, ServiceRequirement
 from rest_framework import generics
-from api.serializers import CustomerSerializer, ServiceProviderSerializer, ServiceSerializer, ServiceOfferingSerializer, EventSerializer
+from api.serializers import CustomerSerializer, ServiceProviderSerializer, ServiceSerializer, ServiceOfferingSerializer, EventSerializer, ServiceRequirementSerializer
 
 class CustomerList(generics.ListCreateAPIView):
 	queryset = Customer.objects.all()
@@ -48,3 +48,21 @@ class EventList(generics.ListCreateAPIView):
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Event.objects.all()
 	serializer_class = EventSerializer
+
+class ServiceRequirementList(generics.ListCreateAPIView):
+	serializer_class = ServiceRequirementSerializer
+	
+	def get_queryset(self):
+		user = self.request.user
+		return ServiceRequirement.objects.filter(event__user=user)
+
+	def perform_create(self,serializer):
+		user = self.request.user
+		event = Event.objects.get(user=user)
+		serializer.save(event=event)
+
+class ServiceRequirementDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = ServiceRequirement.objects.all()
+	serializer_class = ServiceRequirementSerializer
+
+

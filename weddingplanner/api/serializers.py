@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Customer, ServiceProvider, Service, ServiceOffering, Event
+from core.models import Customer, ServiceProvider, Service, ServiceOffering, Event, ServiceRequirement
 
 class CustomerSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -14,7 +14,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Service
-		fields = ('name',)
+		fields = ('name','pk')
 
 class ServiceOfferingSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -24,4 +24,12 @@ class ServiceOfferingSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Event
-		fields = ('name','budget','location_lat','location_lon')
+		fields = ('name','budget','location_lat','location_lon','pk')
+
+class ServiceRequirementSerializer(serializers.ModelSerializer):
+	service_name = serializers.CharField(source="service.name",read_only=True)
+	service_icon = serializers.CharField(source="service.icon",read_only=True)
+
+	class Meta:
+		model = ServiceRequirement
+		fields = ('service','service_name','service_icon')
