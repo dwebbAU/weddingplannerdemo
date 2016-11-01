@@ -36,8 +36,14 @@ class ServiceOfferingDetail(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ServiceOfferingSerializer
 
 class EventList(generics.ListCreateAPIView):
-	queryset = Event.objects.all()
 	serializer_class = EventSerializer
+
+	def get_queryset(self):
+		user = self.request.user
+		return Event.objects.filter(user=user)
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
 
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Event.objects.all()

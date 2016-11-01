@@ -24,4 +24,4 @@ class ServiceOfferingSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Event
-		fields = ('name','user','budget','location_lat','location_lon')
+		fields = ('name','budget','location_lat','location_lon')

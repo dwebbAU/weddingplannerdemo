@@ -1,95 +1,19 @@
-{% extends 'base_web.html' %}
-
-{% block body_block %}
-<! -- Modal -->
-<div id="modal_event_parameters" class="modal fade" role="dialog" data-backdrop="static">
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-      <div class="modal-header">
-	<h4 class="modal-title">Wedding Details</h4>
-      </div>
-      <div class="modal-body">
-      <div class="form-group">
-	<label for="md_event_name">Name:</label>
-	<input type="text" class="form-control" id="md_event_name">
-      </div>
-      
-      <div class="form-group">
-	  <label for="md_event_budget">Budget:</label>
-	  <input type="text" data-slider-min="0" data-slider-max="100000" data-slider-step="1000" data-slider-value="40000" id="sld_event_budget"/>
-	  <label id="lbl_event_budget">$<label id="lbl_event_budget_val">40000</label></label>
-	<!--
-	<div class="col-md-3">
-	  <input id="chk_event_budget" type="checkbox" visibility="hidden"/> No Limit
-        </div>
-	-->
-      </div>
-      <div class="form-group">
- 	 <label for="md_event_location">Location</label>
-	 <select class="form-control-static" id="sel_event_location">
-	    <option>Brisbane</option>
-	 </select>
-      </div>
-      </div>
-      <div class="modal-footer">
-	<button type="button" class="btn btn-success" data-dismiss="modal" id="btn_event_submit">Continue</button>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-{% block script_block %}
 <script>
 $(document).ready(function(){
-	$("body").bind("ajaxSend",function(elm,xhr,s){
-	  if (s.type == "POST"){
-	    xhr.setRequestHeader('X-CSRFToken',getCookie('csrftoken'));
-	    }
-	});
 
 	$.ajax({
-		url : "api/services/",
+		url : "api/events/",
 		type : "GET",
 		success : function(json){
-			for (var i = 0;i < json.length; i++){
-				console.log(json[i].name);
+			if(json.length){
+				window.location.replace("/dashboard");
+			}else{
+				window.location.replace("/setup");
 			}
+		},
+		error : function(xhr, textStatus, errorThrown){
 		}
 	});
 
-	$("#sld_event_budget").slider();
-	$("#sld_event_budget").on("slide",function(slideEvt){
-	  $("#lbl_event_budget_val").text(slideEvt.value);
-	});
-	$("#chk_event_budget").click(function(){
-	  if(this.checked){
-	    $("#sld_event_budget").slider("disable");
-          }else{
-	    $("#sld_event_budget").slider("enable");
-          }
-	});
-
-
-	$('#modal_event_parameters').modal('show');
-	$('#btn_event_submit').click(function() {
-	var event_name = $("#md_event_name").val();
-
-		$.ajax({
-		  beforeSend: function(xhr){
-		    xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
-		  },
-		  type: 'POST',
-		  url: '/api/events/',
-		  data: '{"name":"' + event_name + '","budget":"' + $("#sld_event_budget").val() + '","location_lat":"27.4698","location_lon":"153.0251","user":"2"}',
-		  success: function(data) { alert('data: ' + data); },
-		  error: function(xhr, textStatus, errorThrown){ alert('Status: ',textStatus); alert("Error: " + errorThrown);},
-		  contentType: "application/json",
-		  dataType: 'json'
-	});
-	});
-	
 });
 </script>
-{% endblock %}
