@@ -11,6 +11,8 @@
       </div>
       <div class="modal-body">
       <div class="form-group">
+	<label> First we need to collect some details about your upcoming wedding</label>
+      <div class="form-group">
 	<label for="md_event_name">Name:</label>
 	<input type="text" class="form-control" id="md_event_name">
       </div>
@@ -49,6 +51,12 @@ $(document).ready(function(){
 	    }
 	});
 
+
+	
+	$('#modal_event_parameters').modal('show');
+
+
+
 	$.ajax({
 		url : "api/services/",
 		type : "GET",
@@ -71,8 +79,6 @@ $(document).ready(function(){
           }
 	});
 
-
-	$('#modal_event_parameters').modal('show');
 	$('#btn_event_submit').click(function() {
 	var event_name = $("#md_event_name").val();
 
