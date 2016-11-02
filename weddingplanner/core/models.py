@@ -27,7 +27,7 @@ class ServiceOffering(models.Model):
 	cost = models.DecimalField(max_digits=6,decimal_places=2)
 
 	def __str__(self):
-		return self.service
+		return self.service.name
 
 class Event(models.Model):
 	user = models.OneToOneField(User)
@@ -38,6 +38,7 @@ class Event(models.Model):
 
 	def __str__(self):
 		return self.name
+
 
 class ServiceRequirement(models.Model):
 	service = models.ForeignKey(Service)

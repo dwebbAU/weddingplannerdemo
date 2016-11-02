@@ -14,131 +14,31 @@
 
 </style>
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#" id="lbl_event_name"></a>
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-    </ul>
-  </div>
-</nav>
+{% include 'dashboard_navbar.html' %}
 
-<nav class="navbar navbar-default sidebar" role="navigation">
-    <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand">Services</a>
-    </div>
-	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>      
-    </div>
-    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-      <ul class="nav navbar-nav" id="sidebar-list">
-     </ul>
-    </div>
-  </div>
-</nav> 
+{% include 'dashboard_sidebar.html' %}
 
+{% include 'dashboard_addServiceRequirementModal.html' %}
 
-<div id="modal_add_service" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-              <h4 class="modal-title">Add Services</h4>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <select class="selectpicker" data-live-search="true" id="sel_add_service">
-	  </select>
-	</div>
-      <div class="modal-footer">
-              <button type="button" class="btn btn-success" id="btn_add_service_submit" data-dismiss="modal">Add</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
+{% include 'dashboard_serviceProvidersListing.html' %}
 
 <script>
 $(document).ready(function(){
 	var servicerequirements = [];
 	var event = {};
 
-        $("#sidebar-list").append('<li><a href="#" id="btn_add_services"> Add More <span style="font-size:16px;"><i class="fa fa-plus-circle pull-right"></i></span></a></li>');
+	setEventName();
+	buildServiceRequirementsList();
+	$('#btn_add_service_submit').click(addServiceRequirementSubmit);
+	$('#btn_add_services').click(launchServiceRequirementModal);
 
-	$("#btn_add_service_submit").click(function(){
-	  var newServiceRequirement = {};
-	  newServiceRequirement.service = $('#sel_add_service').val();
-	  $.ajax({
-	    beforeSend: function(xhr){
-	      xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
-	    },
-	  type: "POST",
-	  url: "/api/servicerequirements/",
-	  dataType: "json",
- 	  contentType: "application/json",
-          data: JSON.stringify(newServiceRequirement),
-	  success: function(data){
-		location.reload();
-	  },
-	  });
-	});
-	
 
-	$("#btn_add_services").click(function(){
-	  $.ajax({
-	    beforeSend: function(xhr){
-	      xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
-	    },
-	    type: "GET",
-	    dataType: "json",
-	    url: "/api/services/",
-	    success: function(data){
-	      $.each(data,function(i,item){
-	        $('#sel_add_service').append("<option value=" + data[i].pk + ">" + data[i].name + "</option>");
-	      })
-	    $('#sel_add_service').selectpicker('refresh');
-	    },
-	});	  
+	$('#serviceOfferingListing').empty();
+	$('#serviceOfferingListing').append('<div class="alert alert-success" role="alert"> Select some service requirements on the left to show a list of available providers </div>');
 
-	$('#modal_add_service').modal('show');
-	});
+});
 
-	$.ajax({
-	  beforeSend: function(xhr){
-	    xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
-	  },
-	  type: "GET",
-	  dataType: "json",
-	  url: "/api/events",
-	  success: function(data){
-	    $('#lbl_event_name').text(data[0].name);
-	    event.name = data[0].name;
-	    event.pk = data[0].pk;
-	  },
-	});
 
-	$.ajax({
-	  beforeSend: function(xhr){
-	    xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
-	  },
-	  type: "GET",
-	  dataType: "json",
-	  url: "/api/servicerequirements",
-	  success: function(data){
-	    $.each(data,function(i,item){
-	    $("#sidebar-list").prepend('<li><a href="#">'+ data[i].service_name + '<span style="font-size:16px;"><i class="' + data[i].service_icon + ' pull-right"></i></span></a></li>');
-	    });
-	  },
-	});
-	});
-	
 
 </script>
 

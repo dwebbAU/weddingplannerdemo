@@ -31,6 +31,13 @@ class ServiceOfferingList(generics.ListCreateAPIView):
 	queryset = ServiceOffering.objects.all()
 	serializer_class = ServiceOfferingSerializer
 
+	def get_queryset(self):
+	  queryset = ServiceOffering.objects.all()
+	  service = self.request.query_params.get('service',None)
+	  if service is not None:
+	    queryset = queryset.filter(service=service)
+	  return queryset
+
 class ServiceOfferingDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = ServiceOffering.objects.all()
 	serializer_class = ServiceOfferingSerializer

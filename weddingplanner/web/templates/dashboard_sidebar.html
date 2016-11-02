@@ -1,0 +1,44 @@
+
+<nav class="navbar navbar-default sidebar" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand">Services</a>
+    </div>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+      <ul class="nav navbar-nav" id="sidebar-list">
+     </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+
+
+
+function buildServiceRequirementsList(){
+	
+        $('#sidebar-list').empty();
+        $("#sidebar-list").append('<li><a href="#" id="btn_add_services"> Add More <span style="font-size:16px;"><span class="glyphicon glyphicon-plus pull-right"></span></a></li>');
+
+	$.ajax({
+          beforeSend: function(xhr){
+            xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
+          },
+          type: "GET",
+          dataType: "json",
+          url: "/api/servicerequirements",
+          success: function(data){
+            $.each(data,function(i,item){
+            $("#sidebar-list").prepend('<li><a href="#" onclick="populateServiceProviderListing(' + data[i].service + ')">'+ data[i].service_name + '<span style="font-size:16px;"><span class="' + data[i].service_icon + ' pull-right"></i></span></a></li>');
+            });
+          },
+        });
+}
+</script>

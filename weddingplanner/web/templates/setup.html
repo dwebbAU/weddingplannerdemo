@@ -118,6 +118,28 @@ $(document).ready(function(){
 		  contentType: "application/json",
 		  dataType: 'json'
 	});
+	
+          var newServiceRequirement = {};
+
+	  for(i = 0; i < 8; i++){
+            newServiceRequirement.service = i;
+
+            $.ajax({
+              beforeSend: function(xhr){
+                xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
+              },
+            type: "POST",
+            url: "/api/servicerequirements/",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(newServiceRequirement),
+            
+            });
+	  }
+        
+
+
+
 	});
 	
 });

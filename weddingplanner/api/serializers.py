@@ -17,9 +17,13 @@ class ServiceSerializer(serializers.ModelSerializer):
 		fields = ('name','pk')
 
 class ServiceOfferingSerializer(serializers.ModelSerializer):
+	service_name = serializers.CharField(source="service.name",read_only=True)
+	service_provider_name = serializers.CharField(source="service_provider.user.username",read_only=True)
+	
+	
 	class Meta:
 		model = ServiceOffering
-		fields = ('name','service_provider','cost')
+		fields = ('service','service_provider','cost','service_name','service_provider_name')
 
 class EventSerializer(serializers.ModelSerializer):
 	class Meta:

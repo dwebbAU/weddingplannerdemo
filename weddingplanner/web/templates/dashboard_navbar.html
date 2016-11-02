@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#" id="lbl_event_name"></a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<script>
+function setEventName(){
+  $.ajax({
+          beforeSend: function(xhr){
+            xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
+          },
+          type: "GET",
+          dataType: "json",
+          url: "/api/events",
+          success: function(data){
+            $('#lbl_event_name').text(data[0].name);
+            event.name = data[0].name;
+            event.pk = data[0].pk;
+          },
+        });
+}
+</script>

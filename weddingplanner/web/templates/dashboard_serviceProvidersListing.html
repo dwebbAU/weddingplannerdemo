@@ -1,0 +1,30 @@
+{% load static %}
+
+<div id="serviceOfferingListing" class="col-md-8">
+
+</div>
+
+<script>
+
+  function populateServiceProviderListing(service){
+    var serviceOfferings = [];
+    $('#serviceOfferingListing').empty();
+    $.ajax({
+	beforeSend: function(xhr){
+	  xhr.setRequestHeader("X-CSRFToken",Cookies.get('csrftoken'));
+	},
+	type: "GET",
+	dataType: "json",
+	url: "/api/serviceofferings?service=" + service,
+	success: function(data){
+	  $.each(data,function(i,item){
+	    $('#serviceOfferingListing').append('<div class="col-md-3"><div class="panel panel-default"><div class="panel-heading">' + data[i].service_provider_name + '</div><div class="panel-body"><img src="{% static 'img/profile.jpg' %}" class="img-responsive" width="200" height="200"><br>' + data[i].service_name + '<br>' + '$' + data[i].cost + '</div></div></div>');
+
+	  });
+	},
+	});
+
+}
+
+
+</script>
